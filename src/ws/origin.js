@@ -6,8 +6,11 @@ function normalizeOrigin(value) {
     .replace(/\/+$/, '');
 }
 
-function allowedOrigins() {
-  const origins = new Set([normalizeOrigin(env.FRONTEND_URL)]);
+export function corsAllowedOrigins() {
+  const origins = new Set([
+    normalizeOrigin(env.FRONTEND_URL),
+    'https://ctrlops-frontend-rim.netlify.app',
+  ]);
 
   const extra = process.env.CORS_ORIGINS;
   if (extra) {
@@ -17,13 +20,19 @@ function allowedOrigins() {
     }
   }
 
-  return origins;
+  if (env.NODE_ENV !== 'production') {
+    origins.add('http://localhost:5173');
+    origins.add('http://127.0.0.1:5173');
+    origins.add('http://localhost:4173');
+  }
+
+  return [...origins].filter(Boolean);
 }
 
 export function originAllowed(origin) {
   if (!origin) return true;
 
-  if (allowedOrigins().has(normalizeOrigin(origin))) return true;
+  if (corsAllowedOrigins().includes(normalizeOrigin(origin))) return true;
 
   if (env.NODE_ENV === 'production') return false;
 

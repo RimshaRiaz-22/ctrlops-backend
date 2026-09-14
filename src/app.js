@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import { env } from './config/env.js';
-import { originAllowed } from './ws/origin.js';
+import { corsAllowedOrigins } from './ws/origin.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/auth.routes.js';
 import serverRoutes from './routes/server.routes.js';
@@ -15,9 +15,7 @@ import auditRoutes, { createServerAuditRouter } from './routes/audit.routes.js';
 const app = express();
 
 const corsOptions = {
-  origin: (origin, callback) => {
-    callback(null, originAllowed(origin));
-  },
+  origin: corsAllowedOrigins(),
   credentials: true,
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],

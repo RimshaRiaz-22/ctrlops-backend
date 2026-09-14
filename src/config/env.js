@@ -18,7 +18,11 @@ const envSchema = z.object({
   JWT_REFRESH_SECRET: z.string().min(32, 'JWT_REFRESH_SECRET is required'),
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
-  FRONTEND_URL: z.string().url().default('http://localhost:5173'),
+  FRONTEND_URL: z
+    .string()
+    .url()
+    .default('http://localhost:5173')
+    .transform((url) => url.trim().replace(/\/+$/, '')),
   ALLOW_PRIVATE_IPS: z
     .enum(['true', 'false'])
     .default('false')

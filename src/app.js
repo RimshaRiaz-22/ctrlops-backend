@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import { env } from './config/env.js';
+import { originAllowed } from './ws/origin.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import authRoutes from './routes/auth.routes.js';
 import serverRoutes from './routes/server.routes.js';
@@ -13,26 +14,26 @@ import auditRoutes, { createServerAuditRouter } from './routes/audit.routes.js';
 
 const app = express();
 
-app.use(helmet());
+const corsOptions = {
+  origin: (origin, callback) => {
+    callback(null, originAllowed(origin));
+  },
+  credentials: true,
+  methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Content-Disposition', 'Content-Length'],
+  optionsSuccessStatus: 204,
+};
+
 app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin) return callback(null, true);
-      if (env.NODE_ENV === 'production') {
-        return callback(null, origin === env.FRONTEND_URL);
-      }
-      try {
-        const { hostname } = new URL(origin);
-        const local = hostname === 'localhost' || hostname === '127.0.0.1';
-        return callback(null, local);
-      } catch {
-        return callback(null, false);
-      }
-    },
-    credentials: true,
-    exposedHeaders: ['Content-Disposition', 'Content-Length'],
+  helmet({
+    // Public API is called from Netlify; Helmet's default same-origin CORP
+    // blocks those browser responses even when CORS allows the origin.
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
   }),
 );
+app.use(cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 app.use(
   express.json({
     limit: '32kb',

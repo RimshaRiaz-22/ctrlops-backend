@@ -6,11 +6,18 @@ function normalizeOrigin(value) {
     .replace(/\/+$/, '');
 }
 
+/** Known deployed frontends — always allowed in addition to FRONTEND_URL. */
+const KNOWN_FRONTEND_ORIGINS = [
+  'https://ctrlops-frontend.onrender.com',
+  'https://ctrlops-frontend-rim.netlify.app',
+];
+
 export function corsAllowedOrigins() {
-  const origins = new Set([
-    normalizeOrigin(env.FRONTEND_URL),
-    'https://ctrlops-frontend-rim.netlify.app',
-  ]);
+  const origins = new Set([normalizeOrigin(env.FRONTEND_URL)]);
+
+  for (const origin of KNOWN_FRONTEND_ORIGINS) {
+    origins.add(origin);
+  }
 
   const extra = process.env.CORS_ORIGINS;
   if (extra) {

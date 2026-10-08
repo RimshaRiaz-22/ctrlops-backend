@@ -1,0 +1,35 @@
+===CPU===
+cpu  334934 372 102835 8422255 10334 0 1288 412 0 0
+===MEM===
+MemTotal:        8039172 kB
+MemFree:          412220 kB
+MemAvailable:    4694320 kB
+Buffers:          280112 kB
+Cached:          3894016 kB
+===SWAP===
+SwapTotal:       2097148 kB
+SwapFree:        2097148 kB
+===DISK===
+Filesystem     1B-blocks       Used Available Use% Mounted on
+/dev/vda1     53687091200 21474836480 32212254720  40% /
+/dev/vdb     536870912000 418759311360 118111600640  78% /data
+/dev/loop0       123731968   123731968          0 100% /snap/core/16202
+tmpfs            804212736           0  804212736   0% /dev/shm
+===NET===
+Inter-|   Receive                                                |  Transmit
+ face |bytes    packets errs drop fifo frame compressed multicast|bytes    packets errs drop fifo colls carrier compressed
+    lo: 1048576     100    0    0    0     0          0         0  1048576     100    0    0    0     0       0          0
+  eth0: 12544000    9000    0    0    0     0          0         0   4820000    7000    0    0    0     0       0          0
+docker0: 999999     50    0    0    0     0          0         0    888888     40    0    0    0     0       0          0
+===LOAD===
+0.52 0.61 0.48 1/220 1842
+===UP===
+1847293.41 7231001.88
+===CORES===
+4
+===PROC===
+  PID USER      %CPU %MEM COMMAND
+ 1284 www-data  12.4  3.1 node
+  892 root       4.1  1.2 nginx: master process
+  901 www-data   2.0  0.8 nginx: worker process
+===END===

@@ -1,0 +1,43 @@
+{
+  "name": "ctrlops-backend",
+  "version": "1.0.0",
+  "description": "CtrlOps replica — Add Server module API",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "migrate": "node db/migrate.js",
+    "migrate:test": "node --import ./test/setup.js db/migrate.js",
+    "test": "npm run test:unit && npm run test:integration",
+    "test:unit": "node --test --import ./test/setup.js test/unit/*.test.js",
+    "test:integration": "node --test --test-force-exit --import ./test/setup.js test/integration/*.test.js",
+    "test:security": "npm run test:unit && npm run test:integration",
+    "test:integration:ssh": "LIVE_SSH=1 ALLOW_PRIVATE_IPS=true node --test --import ./test/setup.js test/integration/ssh.live.test.js",
+    "test:db:up": "docker run -d --name pg-test -p 5433:5432 -e POSTGRES_PASSWORD=ctrlops -e POSTGRES_USER=ctrlops -e POSTGRES_DB=ctrlops_test postgres:16-alpine"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "busboy": "^1.6.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.6.2",
+    "helmet": "^8.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mime-types": "^3.0.2",
+    "pdfmake": "^0.2.20",
+    "pg": "^8.23.0",
+    "ssh2": "^1.17.0",
+    "ws": "^8.21.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/ssh2": "^1.15.5",
+    "nodemon": "^3.1.14",
+    "supertest": "^7.1.4"
+  }
+}
